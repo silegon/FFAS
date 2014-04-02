@@ -1,0 +1,12 @@
+<uwsgi>
+    <chdir>/home/silegon/temp/lb_test/lbt</chdir>
+    <module>lbt.wsgi:application</module>
+    <master>True</master>
+    <pidfile>/var/run/project-lbt.pid</pidfile>
+    <vaccum>True</vaccum>
+	<processes>2</processes>
+	<threads>2</threads>
+    <max-request>5000</max-request>
+    <daemonize>uwsgi_lbt.log</daemonize>
+    <socket>127.0.0.1:9005</socket>
+</uwsgi>
