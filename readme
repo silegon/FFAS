@@ -1,0 +1,4 @@
+lbt       "loadbalancer test"
+lbr       "loadbalancer request"
+lbt/at    "auto test"
+lbt/echo  "echo"
