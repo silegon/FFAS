@@ -23,3 +23,25 @@ def report_lbresult(request):
     lb_test_config.save()
 
     return StreamingHttpResponse('')
+
+def lb_report(request):
+    g = request.GET
+    raw_at_id = g.get("raw_at_id")
+    diff_at_id = g.get("diff_at_id")
+    try:
+        raw_at = LBTestConfig.objects.get(pk=raw_at_id)
+        diff_at = LBTestConfig.objects.get(pk=diff_at_id)
+    except:
+        return StreamingHttpResponse('LoadBalance test case id error')
+
+    rsc = raw_at.server_config
+    dsc = diff_at.server_config
+    if not rsc or not dsc:
+        return StreamingHttpResponse('LoadBalance test case have not finish')
+
+    context = {
+        "raw_sever_config":rsc,
+        "diff_server_config":dsc,
+    }
+    template_name = "at/lb_report.html"
+    return render_to_response(template_name, context)
