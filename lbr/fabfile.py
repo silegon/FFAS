@@ -26,8 +26,8 @@ env.passwords = {
 #    get_back_result_file()
 #    report_task()
 REMOTE_WORKING_DIRECTORY = "/root/lbt"
-RMEOTE_HALOG_DIRECTORY = "/root/lbt/halog"
-REMOTE_LBHASH_DIRECTORY = "/root/lbt/lbhash"
+REMOTE_HALOG_DIRECTORY = os.path.join(REMOTE_WORKING_DIRECTORY, "halog")
+REMOTE_LBHASH_DIRECTORY = os.path.join(REMOTE_WORKING_DIRECTORY, "lbhash")
 REMOTE_HAPROXY_LOG = "/data/proclog/log/fscs/access.log"
 
 LOCAL_PROJECT_DIRECTORY = "/home/silegon/lb_test/lbr"
@@ -38,24 +38,25 @@ LOCAL_LBHASH_DIRECTORY = "/home/silegon/lb_test/lbr/halog"
 LOCAL_SITE = "http://192.168.135.101:8500/"
 
 HAPROXY_CFG_URL = LOCAL_SITE + "get_haproxy_config?at_id=%s"
-REPORT_URL = LOCAL_SIZTE + "report_lb_request?at_id=%s&b64_statistical_result=%s"
+REPORT_URL = LOCAL_SITE + "report_lb_request?at_id=%s&b64_statistical_result=%s"
 
 @task
 @hosts("root@192.168.100.166")
 def run_lb_test(at_id):
     #remote_clear
     run("rm %s && touch %s " % (REMOTE_HAPROXY_LOG, REMOTE_HAPROXY_LOG))
+    run("mkdir -p %s" % REMOTE_HALOG_DIRECTORY)
     run("mkdir -p %s" % REMOTE_LBHASH_DIRECTORY)
-    run("mkdir -p %s" % REMOTE_HAPROXY_LOG)
 
     local_haproxy_cfg_path = os.path.join(LOCAL_HAPROXY_CFG_DIRECTORY, "haproxy_%s.cfg" % at_id)
+    print HAPROXY_CFG_URL % at_id
     urlretrieve(HAPROXY_CFG_URL % at_id, local_haproxy_cfg_path)
     put(local_haproxy_cfg_path, os.path.join(REMOTE_WORKING_DIRECTORY, "haproxy.cfg"))
 
     remote_reload_script = os.path.join(REMOTE_WORKING_DIRECTORY, "fscs_reload_config.py")
     local_reload_script = os.path.join(LOCAL_PROJECT_DIRECTORY, "fscs_reload_config.py")
     put(local_reload_script, remote_reload_script)
-    run("python %s" % remote_reload_scirpt)
+    run("python %s" % remote_reload_script)
 
     remote_request_script = os.path.join(REMOTE_WORKING_DIRECTORY, "lb_request.py")
     local_request_script = os.path.join(LOCAL_PROJECT_DIRECTORY, "lb_request.py")

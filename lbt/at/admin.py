@@ -4,7 +4,7 @@ from models import LBTestConfig, DiffResult
 
 
 class LBTestConfigAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('server_config', 'statistical_result')
 
 class DiffResultAdmin(admin.ModelAdmin):
     pass

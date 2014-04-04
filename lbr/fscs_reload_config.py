@@ -20,7 +20,7 @@ HAPROXY_LOCATION = '/usr/local/haproxy/sbin/haproxy'
 command_dict = {
     ############################# reload_fscs_init  ####################################
     "backup_history_config" : ["cp %s %s" % (NORMAL_CONFIG_LOCATION, os.path.join(HAPROXY_HISTORY_CONFIG_DIRECTORY, "haproxy.conf_%s" % time.strftime("%y%m%d%H%M%S", time.localtime()))), ""],
-    "prepare_fscs_config" : ["cp %s %s" % (os.path.join(os.getcwd(), "haproxy.cfg"), TEMP_CONFIG_LOCATION), ""],
+    "prepare_fscs_config" : ["cp %s %s" % (os.path.join(os.path.split(os.path.realpath(__file__))[0], "haproxy.cfg"), TEMP_CONFIG_LOCATION), ""],
     ############################# reload_fscs_config  ####################################
     "check_download_fscs_config" : ["%s -c -q -V -f %s" % (HAPROXY_LOCATION, TEMP_CONFIG_LOCATION), ""],
     "backup_fscs_config" : ["mv %s %s" % (NORMAL_CONFIG_LOCATION, BACKUP_CONFIG_LOCATION), ""],
