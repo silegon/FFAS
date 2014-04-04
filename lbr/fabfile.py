@@ -32,8 +32,8 @@ REMOTE_HAPROXY_LOG = "/data/proclog/log/fscs/access.log"
 
 LOCAL_PROJECT_DIRECTORY = "/home/silegon/lb_test/lbr"
 LOCAL_HAPROXY_CFG_DIRECTORY = "/home/silegon/lb_test/lbr/haproxy_cfg"
-LOCAL_HALOG_DIRECTORY = "/home/silegon/lb_test/lbr/lbhash"
-LOCAL_LBHASH_DIRECTORY = "/home/silegon/lb_test/lbr/halog"
+LOCAL_HALOG_DIRECTORY = "/home/silegon/lb_test/lbr/halog"
+LOCAL_LBHASH_DIRECTORY = "/home/silegon/lb_test/lbr/lbhash"
 
 LOCAL_SITE = "http://192.168.135.101:8500/"
 

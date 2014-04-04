@@ -17,8 +17,9 @@ def report_lbresult(request):
     g = request.GET
     at_id = g.get("at_id")
     b64_statistical_result = g.get("b64_statistical_result")
+    result = urlsafe_b64decode(str(b64_statistical_result))
     lb_test_config = LBTestConfig.objects.get(pk=at_id)
-    lb_test_config.statistical_result = urlsafe_b64decode(b64_statistical_result)
+    lb_test_config.statistical_result = result
     lb_test_config.save()
 
     return StreamingHttpResponse('')

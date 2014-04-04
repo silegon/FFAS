@@ -1,7 +1,7 @@
 #coding:utf-8
 from fabric.api import *
 
-TEST_SERVER_PORT = '5000'
+TEST_SERVER_PORT = '8500'
 TEST_SERVER_IP = '192.168.135.101'
 
 
