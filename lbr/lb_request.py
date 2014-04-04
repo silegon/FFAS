@@ -8,7 +8,7 @@ from urllib2 import urlopen
 
 def lb_test_request():
     for i in range(10000):
-        res = urlopen("http://192.168.100.166:8093/%s" % i)
+        res = urlopen("http://192.168.135.103:8093/%s" % i)
         if res.read() != "echo":
             print "error"
 

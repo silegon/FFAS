@@ -8,11 +8,11 @@ from urllib import urlopen, urlretrieve
 from base64 import urlsafe_b64encode
 
 env.hosts = [
-    "root@192.168.100.166",
+    "root@192.168.135.103",
 ]
 
 env.passwords = {
-    "root@192.168.100.166:22":"gsp_cluster_100_166"
+    "root@192.168.135.103:22":"root",
 }
 
 #@task
@@ -38,10 +38,10 @@ LOCAL_LBHASH_DIRECTORY = "/home/silegon/lb_test/lbr/halog"
 LOCAL_SITE = "http://192.168.135.101:8500/"
 
 HAPROXY_CFG_URL = LOCAL_SITE + "get_haproxy_config?at_id=%s"
-REPORT_URL = LOCAL_SITE + "report_lb_request?at_id=%s&b64_statistical_result=%s"
+REPORT_URL = LOCAL_SITE + "report_lbresult?at_id=%s&b64_statistical_result=%s"
 
 @task
-@hosts("root@192.168.100.166")
+@hosts("root@192.168.135.103")
 def run_lb_test(at_id):
     #remote_clear
     run("rm %s && touch %s " % (REMOTE_HAPROXY_LOG, REMOTE_HAPROXY_LOG))
@@ -49,7 +49,6 @@ def run_lb_test(at_id):
     run("mkdir -p %s" % REMOTE_LBHASH_DIRECTORY)
 
     local_haproxy_cfg_path = os.path.join(LOCAL_HAPROXY_CFG_DIRECTORY, "haproxy_%s.cfg" % at_id)
-    print HAPROXY_CFG_URL % at_id
     urlretrieve(HAPROXY_CFG_URL % at_id, local_haproxy_cfg_path)
     put(local_haproxy_cfg_path, os.path.join(REMOTE_WORKING_DIRECTORY, "haproxy.cfg"))
 
@@ -64,14 +63,14 @@ def run_lb_test(at_id):
     run("python %s" % remote_request_script)
 
     lbhash_file = "lbhash_%s.log" % (at_id)
-    remote_lbhash_file = os.path.join(REMOTE_WORKING_DIRECTORY, lbhash_file)
+    remote_lbhash_file = os.path.join(REMOTE_LBHASH_DIRECTORY, lbhash_file)
     run("cat %s | awk '{print $9,$20}' > %s" % (REMOTE_HAPROXY_LOG, remote_lbhash_file))
     halog_file = "halog_%s.log" % (at_id)
-    remote_halog_file = os.path.join(REMOTE_WORKING_DIRECTORY, halog_file)
+    remote_halog_file = os.path.join(REMOTE_HALOG_DIRECTORY, halog_file)
     run("halog -srv > %s" % remote_halog_file)
 
     local_lbhash_file = os.path.join(LOCAL_LBHASH_DIRECTORY, lbhash_file)
-    local_halog_file = os.path.join(LOCAL_LBHASH_DIRECTORY, halog_file)
+    local_halog_file = os.path.join(LOCAL_HALOG_DIRECTORY, halog_file)
     get(remote_lbhash_file, local_lbhash_file)
     get(remote_halog_file, local_halog_file)
 
