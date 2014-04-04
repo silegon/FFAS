@@ -2,7 +2,6 @@
 *.swp
 *.pyc
 *.log
-fabfile.py
 private*
 local*
 *.sql
