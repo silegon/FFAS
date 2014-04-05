@@ -52,7 +52,7 @@ def parse_data(trd, tdd):
         flow_ratio = ratio(flow_count, total_url_count)
         #new_count = suc - total_same_url_count
         new_count = duc - suc
-        new_ratio = ratio(new_count, total_same_url_count)
+        new_ratio = ratio(new_count, duc)
         #peak = (1 + flow_ratio) * (1 + new_ratio)
         peak = ratio(duc + duc - suc, ruc)
         #dc = "peak %s flow %s %s new %s %s" % (peak, flow_ratio, flow_count, new_ratio, new_count)
@@ -72,13 +72,13 @@ def parse_data(trd, tdd):
         }
         rdata.append(d)
     total_info = {
-        "total_url_count" : total_url_count, 
+        "total_url_count" : total_url_count,
         "total_same_url_count" : total_same_url_count,
         "total_ratio" : ratio(total_same_url_count, total_url_count),
     }
     vrdata = sorted(rdata, key=itemgetter("server"))
 
-    return vrdata, total_info 
+    return vrdata, total_info
 def get_access_analytics_data(raw_at_id, diff_at_id):
     trd = get_file_data(raw_at_id)
     tdd = get_file_data(diff_at_id)
