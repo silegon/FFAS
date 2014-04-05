@@ -4,6 +4,7 @@ from base64 import urlsafe_b64decode
 from django.http import StreamingHttpResponse
 from django.shortcuts import render_to_response
 from models import LBTestConfig
+from pha import get_access_analytics_data
 
 def get_haproxy_config(request):
     g = request.GET
@@ -26,8 +27,8 @@ def report_lbresult(request):
 
 def lb_report(request):
     g = request.GET
-    raw_at_id = g.get("raw_at_id")
-    diff_at_id = g.get("diff_at_id")
+    at_vid = g.get("at_vid")
+    raw_at_id, diff_at_id = at_vid.split('v')
     try:
         raw_at = LBTestConfig.objects.get(pk=raw_at_id)
         diff_at = LBTestConfig.objects.get(pk=diff_at_id)
@@ -39,9 +40,15 @@ def lb_report(request):
     if not rsc or not dsc:
         return StreamingHttpResponse('LoadBalance test case have not finish')
 
+    aadata, total_info = get_access_analytics_data(raw_at_id, diff_at_id)
+
     context = {
-        "raw_sever_config":rsc,
+        "raw_at_id":raw_at_id,
+        "diff_at_id":diff_at_id,
+        "raw_server_config":rsc,
         "diff_server_config":dsc,
+        "aadata":aadata,
+        "total_info":total_info,
     }
     template_name = "at/lb_report.html"
     return render_to_response(template_name, context)
