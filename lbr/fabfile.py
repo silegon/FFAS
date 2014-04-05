@@ -49,6 +49,8 @@ def run_lb_test(at_id):
     run("mkdir -p %s" % REMOTE_LBHASH_DIRECTORY)
 
     local_haproxy_cfg_path = os.path.join(LOCAL_HAPROXY_CFG_DIRECTORY, "haproxy_%s.cfg" % at_id)
+
+    print HAPROXY_CFG_URL % at_id
     urlretrieve(HAPROXY_CFG_URL % at_id, local_haproxy_cfg_path)
     put(local_haproxy_cfg_path, os.path.join(REMOTE_WORKING_DIRECTORY, "haproxy.cfg"))
 

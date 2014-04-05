@@ -1,4 +1,5 @@
 *~
+*.cfg
 *.swp
 *.pyc
 *.log
@@ -17,5 +18,7 @@ moker_utils.py
 tta3_monitor.py
 draft
 monitor/cdata
+lbr/haproxy_cfg
+lbr/lbhash
 *settings.py
 __pycache__
