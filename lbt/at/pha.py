@@ -5,7 +5,7 @@
 from collections import defaultdict
 from django.conf import settings
 from os.path import join
-from operator import attrgetter,itemgetter
+from operator import itemgetter
 
 def get_file_data(at_id):
     file = join(settings.LBHASH_FILE_DIRECTORY, "lbhash_%s.log" % at_id)
@@ -19,6 +19,8 @@ def get_file_data(at_id):
     return dl
 
 def ratio(molecular, denominator):
+    if not denominator:
+        return 0
     return "%.2f%%" % (molecular*100.0/denominator)
 
 def parse_data(trd, tdd):
